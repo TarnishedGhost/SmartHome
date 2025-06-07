@@ -7,6 +7,8 @@ import sensors.SensorListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import decorators.EnergySavingDecorator;
+
 public class SmartHomeController implements SensorListener {
     private static SmartHomeController instance;
     private final List<SmartDevice> devices;
@@ -23,11 +25,13 @@ public class SmartHomeController implements SensorListener {
     }
 
     public void addDevice(SmartDevice device) {
-        if (device != null) {
-            devices.add(device);
-            System.out.println("✅ Пристрій додано: " + device.getName());
+    if (device != null) {
+        SmartDevice wrapped = new EnergySavingDecorator(device);
+        devices.add(wrapped);
+        System.out.println("✅ Пристрій додано (з енергоощадністю): " + wrapped.getName());
         }
     }
+
 
     public void turnOnAll() {
         System.out.println("\n🔌 Увімкнення всіх пристроїв:");
