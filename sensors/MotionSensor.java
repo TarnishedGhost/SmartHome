@@ -1,4 +1,8 @@
 package sensors;
+import sensors.SensorListener;
+import sensors.TemperatureSensor;
+import sensors.SmokeSensor;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +13,13 @@ public class MotionSensor implements Sensor {
 
     public MotionSensor(String name) {
         this.name = name;
+    }
+
+    public void detectMotion() {
+        System.out.println("📡 Motion detected by " + name);
+        for (SensorListener listener : listeners) {
+            listener.onSensorTriggered(name, "motion detected");
+        }
     }
 
     @Override
