@@ -12,19 +12,20 @@ import sensors.Sensor;
 import sensors.SensorListener;
 import sensors.TemperatureSensor;
 import sensors.SmokeSensor;
+import factory.SmartDeviceFactory;
 
 
 public class Main {
     public static void main(String[] args) {
         SmartHomeController controller = SmartHomeController.getInstance();
 
-        SmartDevice light = new Light("Living Room");
-        SmartDevice air = new AirConditioner("Bedroom");
-        SmartDevice alarm = new Alarm("Security");
+        SmartDevice light = SmartDeviceFactory.createDevice("light", "Living Room");
+        SmartDevice air = SmartDeviceFactory.createDevice("airconditioner", "Bedroom");
+        SmartDevice alarm = SmartDeviceFactory.createDevice("alarm", "Security");
 
-        controller.addDevice(new Light("Living Room"));
-        controller.addDevice(new AirConditioner("Bedroom"));
-        controller.addDevice(new Alarm("Security"));
+        controller.addDevice(light);
+        controller.addDevice(air);
+        controller.addDevice(alarm);
 
         Command turnOnLight = new TurnOnCommand(light);
         Command turnOffAC = new TurnOffCommand(air);
