@@ -1,13 +1,14 @@
 package controller;
 
 import devices.SmartDevice;
+import sensors.SensorListener;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmartHomeController {
+public class SmartHomeController implements SensorListener {
     private static SmartHomeController instance;
-
     private final List<SmartDevice> devices;
 
     private SmartHomeController() {
@@ -47,7 +48,7 @@ public class SmartHomeController {
         if (device != null) {
             device.on();
         } else {
-            System.out.println("⚠️ Пристрій не знайдено: " + deviceName);
+            System.out.println(" Пристрій не знайдено: " + deviceName);
         }
     }
 
@@ -56,7 +57,7 @@ public class SmartHomeController {
         if (device != null) {
             device.off();
         } else {
-            System.out.println("⚠️ Пристрій не знайдено: " + deviceName);
+            System.out.println(" Пристрій не знайдено: " + deviceName);
         }
     }
 
@@ -72,4 +73,31 @@ public class SmartHomeController {
         }
         return null;
     }
+
+    @Override
+    public void onSensorTriggered(String sensorName, String data) {
+        System.out.println("📥 Сигнал від сенсора [" + sensorName + "]: " + data);
+        String event = data.toLowerCase();
+
+        if (event.equals("motion detected")) {
+            SmartDevice light = findDeviceByName("Living Room");
+            if (light != null) light.on();
+        } 
+        else if (event.equals("smoke detected")) {
+            SmartDevice alarm = findDeviceByName("Security");
+            if (alarm != null) alarm.on();
+        } 
+        else if (event.equals("temperature high")) {
+            SmartDevice air = findDeviceByName("Bedroom");
+            if (air != null) air.on();
+        } 
+        else if (event.equals("temperature low")) {
+            SmartDevice air = findDeviceByName("Bedroom");
+            if (air != null) air.off();
+        } 
+        else {
+            System.out.println("Невідома подія: " + data);
+        }
+    }
 }
+    
